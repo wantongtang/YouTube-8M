@@ -42,28 +42,26 @@ gsutil cp gs://us.data.yt8m.org/1/video_level/train/traina[0-9].tfrecord .
 ```
 4. Once the model works well, run the model using the entire dataset on Google Cloud
     1. Create a storage bucket to store training logs and checkpoints. (Only for the first time)
-    ```bash
-    BUCKET_NAME=gs://${USER}_yt8m_train_bucket
-    gsutil mb -l us-east1 $BUCKET_NAME
-    ```
-    2. Submit the training job
-    
-    ```bash
-    JOB_NAME=yt8m_train_$(date +%Y%m%d_%H%M%S)
-    gcloud --verbosity=debug ml-engine jobs submit training $JOB_NAME \
-      --package-path=youtube-8m --module-name=youtube-8m.train \
-      --staging-bucket=$BUCKET_NAME --region=us-east1 \
-      --config=youtube-8m/cloudml-gpu.yaml \
-      --  --train_data_pattern='gs://youtube8m-ml-us-east1/1/video_level/train/train*.tfrecord' \
-          --model=LogisticModel \
-          --train_dir=$BUCKET_NAME/yt8m_train_video_level_logistic_model
-    ```
-      
+   ```bash
+   BUCKET_NAME=gs://${USER}_yt8m_train_bucket
+   gsutil mb -l us-east1 $BUCKET_NAME
+   ```
+    2. Submit the training job    
+   ```bash
+   JOB_NAME=yt8m_train_$(date +%Y%m%d_%H%M%S)
+   gcloud --verbosity=debug ml-engine jobs submit training $JOB_NAME \
+    --package-path=youtube-8m --module-name=youtube-8m.train \
+    --staging-bucket=$BUCKET_NAME --region=us-east1 \
+    --config=youtube-8m/cloudml-gpu.yaml \
+    --  --train_data_pattern='gs://youtube8m-ml-us-east1/1/video_level/train/train*.tfrecord' \
+      --model=LogisticModel \
+      --train_dir=$BUCKET_NAME/yt8m_train_video_level_logistic_model
+   ```      
     3. Check the process of the submitted job in the [job console](https://console.cloud.google.com/ml/jobs)
     4. Also, check the training loss through [tensorboard](http://localhost:8080)
-    ```bash
-    tensorboard --logdir=$BUCKET_NAME --port=8080
-    ```
+   ```bash
+   tensorboard --logdir=$BUCKET_NAME --port=8080
+   ```
 **NOTE**: A model will be ***finetuned*** if the same `train_dir` is given. Use `--start_new_model` for training from scrach.
 5. Evalute the model
 ```bash
@@ -153,22 +151,18 @@ gcloud config set project [project_id]
 gcloud help` or `gcloud help [sub-command]
 ```
 * Run code locally
-
 ```bash
 gcloud ml-engine local train
   --package-path=[package_path] --module-name=[main_function_path]
   -- [params_for_main_function]
 ```
-
 * Run code on Google Cloud:
-
 ```bash
 gcloud --verbosity=[mode] ml-engine jobs submit training [job_name]
   --package-path=[package_path] --module-name=[main_function_path
   --staging-bucket=[log_dir] --region=[region] --config=[config_path]
   -- [params_for_main_function]
 ```
-
 * Download data from Google Cloud:
 ```bash
 gsutil cp [src_path] [dst_path]

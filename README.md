@@ -32,9 +32,9 @@ git clone https://github.com/google/youtube-8m.git
 2. Run the code locally to make sure that it can function normally on Google Cloud
 ```
 gcloud ml-engine local train \
-  --package-path=youtube-8m --module-name=youtube-8m.train \
-  --  --train_data_pattern='gs://youtube8m-ml/1/video_level/train/train*.tfrecord' \
-      --train_dir=/tmp/yt8m_train --model=LogisticModel --start_new_model
+    --package-path=youtube-8m --module-name=youtube-8m.train \
+    --  --train_data_pattern='gs://youtube8m-ml/1/video_level/train/train*.tfrecord' \
+        --train_dir=/tmp/yt8m_train --model=LogisticModel --start_new_model
 ```
 3. Download dataset from Google Cloud, then train and test the model locally using the downloaded dataset (part of the whole set).
 ```bash
@@ -68,24 +68,24 @@ gsutil cp gs://us.data.yt8m.org/1/video_level/train/traina[0-9].tfrecord .
 JOB_TO_EVAL=yt8m_train_video_level_logistic_model
 JOB_NAME=yt8m_eval_$(date +%Y%m%d_%H%M%S)
 gcloud --verbosity=debug ml-engine jobs submit training $JOB_NAME \
-  --package-path=youtube-8m --module-name=youtube-8m.eval \
-  --staging-bucket=$BUCKET_NAME --region=us-east1 \
-  --config=youtube-8m/cloudml-gpu.yaml \
-  --  --eval_data_pattern='gs://youtube8m-ml-us-east1/1/video_level/validate/validate*.tfrecord' \
-      --model=LogisticModel \
-      --train_dir=$BUCKET_NAME/${JOB_TO_EVAL} --run_once=True
+    --package-path=youtube-8m --module-name=youtube-8m.eval \
+    --staging-bucket=$BUCKET_NAME --region=us-east1 \
+    --config=youtube-8m/cloudml-gpu.yaml \
+    --  --eval_data_pattern='gs://youtube8m-ml-us-east1/1/video_level/validate/validate*.tfrecord' \
+        --model=LogisticModel \
+        --train_dir=$BUCKET_NAME/${JOB_TO_EVAL} --run_once=True
 ```
 6. Inference on the test dataset
 ```bash
 JOB_TO_EVAL=yt8m_train_video_level_logistic_model
 JOB_NAME=yt8m_inference_$(date +%Y%m%d_%H%M%S)
 gcloud --verbosity=debug ml-engine jobs submit training $JOB_NAME \
-  --package-path=youtube-8m --module-name=youtube-8m.inference \
-  --staging-bucket=$BUCKET_NAME --region=us-east1 \
-  --config=youtube-8m/cloudml-gpu.yaml \
-  --  --input_data_pattern='gs://youtube8m-ml/1/video_level/test/test*.tfrecord' \
-      --train_dir=$BUCKET_NAME/${JOB_TO_EVAL} \
-      --output_file=$BUCKET_NAME/${JOB_TO_EVAL}/predictions.csv
+    --package-path=youtube-8m --module-name=youtube-8m.inference \
+    --staging-bucket=$BUCKET_NAME --region=us-east1 \
+    --config=youtube-8m/cloudml-gpu.yaml \
+    --  --input_data_pattern='gs://youtube8m-ml/1/video_level/test/test*.tfrecord' \
+        --train_dir=$BUCKET_NAME/${JOB_TO_EVAL} \
+        --output_file=$BUCKET_NAME/${JOB_TO_EVAL}/predictions.csv
 ```
 7. View the generated files on Google Cloud using [storage console](https://console.cloud.google.com/storage/browser)
 8. Copy `predictions.csv` locally:
@@ -96,13 +96,13 @@ gsutil cp $BUCKET_NAME/${JOB_TO_EVAL}/predictions.csv .
 ```bash
 JOB_NAME=yt8m_train_$(date +%Y%m%d_%H%M%S)
 gcloud --verbosity=debug ml-engine jobs submit training $JOB_NAME \
-  --package-path=youtube-8m --module-name=youtube-8m.train \
-  --staging-bucket=$BUCKET_NAME --region=us-east1 \
-  --config=youtube-8m/cloudml-gpu.yaml \
-  --  --train_data_pattern='gs://youtube8m-ml-us-east1/1/frame_level/train/train*.tfrecord' \
-      --frame_features=True --model=FrameLevelLogisticModel --feature_names="rgb" \
-      --feature_sizes="1024" --batch_size=128 \
-      --train_dir=$BUCKET_NAME/yt8m_train_frame_level_logistic_model
+    --package-path=youtube-8m --module-name=youtube-8m.train \
+    --staging-bucket=$BUCKET_NAME --region=us-east1 \
+    --config=youtube-8m/cloudml-gpu.yaml \
+    --  --train_data_pattern='gs://youtube8m-ml-us-east1/1/frame_level/train/train*.tfrecord' \
+        --frame_features=True --model=FrameLevelLogisticModel --feature_names="rgb" \
+        --feature_sizes="1024" --batch_size=128 \
+        --train_dir=$BUCKET_NAME/yt8m_train_frame_level_logistic_model
 ```
 10. Use audio features
     * Video-level

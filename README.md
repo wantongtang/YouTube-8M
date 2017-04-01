@@ -118,6 +118,7 @@ gcloud --verbosity=debug ml-engine jobs submit training $JOB_NAME \
 gsutil cp gs://us.data.yt8m.org/1/ground_truth_labels/train_labels.csv /destination/folder/
 gsutil cp gs://us.data.yt8m.org/1/ground_truth_labels/validate_labels.csv /destination/folder/
 ```
+
 ### Evaluation Metric: Global Average Precision
 ![](http://www.sciweavers.org/tex2img.php?eq=GAP%20%3D%20%5Csum_%7Bi%3D1%7D%5EN%20p%28i%29%5CDelta%20r%28i%29&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
 
@@ -133,6 +134,7 @@ Each video has:
 * "mean_rgb": float array of length 1024
 * "mean_audio": float array of length 128
 Example code:
+
 ```python
 import tensorflow as tf
 
